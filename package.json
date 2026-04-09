@@ -1,0 +1,22 @@
+{
+  "name": "crafta-chat",
+  "version": "1.0.0",
+  "description": "Production-ready, config-driven Node.js chat package with plug-and-play defaults.",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "test": "node --test dev-tools/smoke-tests/*.test.js"
+  },
+  "keywords": [
+    "chat",
+    "realtime",
+    "nodejs",
+    "plugin",
+    "sdk"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}
