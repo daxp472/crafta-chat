@@ -1,21 +1,54 @@
 {
-  "name": "crafta-chat",
+  "name": "@dax-crafta/chat",
   "version": "1.0.0",
-  "description": "Production-ready, config-driven Node.js chat package with plug-and-play defaults.",
+  "description": "A production-ready, backend-integrated chat plugin for Crafta with realtime channels, presence, reactions, seen receipts, and MongoDB adapter support.",
   "main": "src/index.js",
   "types": "src/index.d.ts",
+  "private": false,
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "require": "./src/index.js"
+    }
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
   "scripts": {
     "test": "node --test dev-tools/smoke-tests/*.test.js"
+  },
+  "peerDependencies": {
+    "crafta": "^1.1.4"
   },
   "keywords": [
     "chat",
     "realtime",
+    "socket",
+    "presence",
+    "message-reactions",
+    "read-receipts",
+    "group-chat",
+    "direct-message",
+    "mongodb",
+    "crafta",
     "nodejs",
     "plugin",
     "sdk"
   ],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daxp472/crafta.git"
+  },
+  "bugs": {
+    "url": "https://github.com/daxp472/crafta/issues"
+  },
+  "homepage": "https://github.com/daxp472/crafta#readme",
+  "author": "Dax Patel",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=18"
   }

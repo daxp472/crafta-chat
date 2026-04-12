@@ -1,10 +1,12 @@
 # crafta-chat
 
-[![npm version](https://img.shields.io/npm/v/crafta-chat.svg)](https://www.npmjs.com/package/crafta-chat)
-[![npm downloads/month](https://img.shields.io/npm/dm/crafta-chat.svg)](https://www.npmjs.com/package/crafta-chat)
-[![license](https://img.shields.io/npm/l/crafta-chat.svg)](https://www.npmjs.com/package/crafta-chat)
+[![npm version](https://img.shields.io/npm/v/%40dax-crafta%2Fchat.svg)](https://www.npmjs.com/package/@dax-crafta/chat)
+[![npm downloads/month](https://img.shields.io/npm/dm/%40dax-crafta%2Fchat.svg)](https://www.npmjs.com/package/@dax-crafta/chat)
+[![license](https://img.shields.io/npm/l/%40dax-crafta%2Fchat.svg)](https://www.npmjs.com/package/@dax-crafta/chat)
 
 Production-ready chat engine for Node.js that is made to plug into your **existing backend**, not replace it.
+
+Package: @dax-crafta/chat
 
 ## Core Promise
 
@@ -20,13 +22,13 @@ Production-ready chat engine for Node.js that is made to plug into your **existi
 ## Install
 
 ```bash
-npm install crafta-chat
+npm install @dax-crafta/chat
 ```
 
 ## Quick Start
 
 ```js
-const { chat } = require('crafta-chat');
+const { chat } = require('@dax-crafta/chat');
 
 const app = chat({
   features: {
@@ -63,7 +65,7 @@ You pass your own identity and user fields from your app, for example:
 - Your tenant/org id
 - Your own auth/session context
 
-`crafta-chat` does not force user management. It uses what you pass in payload and metadata.
+This package does not force user management. It uses what you pass from your own app and auth layer.
 
 ## Realtime On/Off + Socket Adapter
 
@@ -103,7 +105,7 @@ app.setUserOnline({ userId: 'u1', roomId: 'team-general', sessionId: 's1' });
 Use your existing Mongo collections.
 
 ```js
-const { chat, createMongoPersistenceAdapter } = require('crafta-chat');
+const { chat, createMongoPersistenceAdapter } = require('@dax-crafta/chat');
 
 const persistenceAdapter = createMongoPersistenceAdapter({
   rooms: db.collection('chat_rooms'),
@@ -183,6 +185,14 @@ chat({
 - `close()`
 - `getConfig()`, `getWarnings()`, `getAuditLogs()`
 
+## Why Teams Choose It
+
+- No lock-in: works with your current backend and auth flow.
+- Fast setup: one initialization call, sensible defaults.
+- Realtime flexibility: turn transport on/off without rewriting app logic.
+- Production safety: payload validation, rate limiting, audit logs, redaction.
+- Extensible persistence: in-memory default, Mongo adapter helper for your DB.
+
 ## Events You Can Listen
 
 - `message`
@@ -205,3 +215,10 @@ npm test
 ```
 
 Includes 7 smoke tests for exports, config normalization, middleware toggle behavior, payload validation, realtime fallback, cursor behavior, and security/audit safeguards.
+
+## Publish Checklist
+
+- Update version in package.json
+- Run npm test
+- Verify README examples with your backend
+- Publish: npm publish
