@@ -1,6 +1,6 @@
 {
   "name": "@dax-crafta/chat",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A production-ready, backend-integrated chat plugin for Crafta with realtime channels, presence, reactions, seen receipts, and MongoDB adapter support.",
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -8,6 +8,7 @@
   "exports": {
     ".": {
       "types": "./src/index.d.ts",
+      "import": "./src/index.js",
       "require": "./src/index.js"
     }
   },

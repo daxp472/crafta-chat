@@ -1,4 +1,4 @@
-# crafta-chat
+# @dax-crafta/chat
 
 [![npm version](https://img.shields.io/npm/v/%40dax-crafta%2Fchat.svg)](https://www.npmjs.com/package/@dax-crafta/chat)
 [![npm downloads/month](https://img.shields.io/npm/dm/%40dax-crafta%2Fchat.svg)](https://www.npmjs.com/package/@dax-crafta/chat)
@@ -30,30 +30,35 @@ npm install @dax-crafta/chat
 ```js
 const { chat } = require('@dax-crafta/chat');
 
-const app = chat({
-  features: {
-    realtime: true,
-    rateLimit: true,
-    auditLogs: true,
-  },
+(async () => {
+  const app = chat({
+    features: {
+      realtime: true,
+      rateLimit: true,
+      auditLogs: true,
+    },
+  });
+
+  await app.createGroupChannel({
+    roomId: 'team-general',
+    name: 'Team General',
+    members: ['u1', 'u2'],
+  });
+
+  const message = await app.sendMessage({
+    roomId: 'team-general',
+    userId: 'u1',
+    text: 'Hello team',
+  });
+
+  await app.markSeen({ roomId: 'team-general', messageId: message.id, userId: 'u2' });
+  await app.addReaction({ roomId: 'team-general', messageId: message.id, userId: 'u2', reaction: 'like' });
+
+  console.log(await app.readMessages({ roomId: 'team-general' }));
+})().catch((error) => {
+  console.error(error);
+  process.exit(1);
 });
-
-await app.createGroupChannel({
-  roomId: 'team-general',
-  name: 'Team General',
-  members: ['u1', 'u2'],
-});
-
-const message = await app.sendMessage({
-  roomId: 'team-general',
-  userId: 'u1',
-  text: 'Hello team',
-});
-
-await app.markSeen({ roomId: 'team-general', messageId: message.id, userId: 'u2' });
-await app.addReaction({ roomId: 'team-general', messageId: message.id, userId: 'u2', reaction: 'like' });
-
-console.log(await app.readMessages({ roomId: 'team-general' }));
 ```
 
 ## Existing Backend Integration
