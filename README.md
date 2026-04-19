@@ -4,9 +4,88 @@
 [![npm downloads/month](https://img.shields.io/npm/dm/%40dax-crafta%2Fchat.svg)](https://www.npmjs.com/package/@dax-crafta/chat)
 [![license](https://img.shields.io/npm/l/%40dax-crafta%2Fchat.svg)](https://www.npmjs.com/package/@dax-crafta/chat)
 
-Production-ready chat engine for Node.js that is made to plug into your **existing backend**, not replace it.
+Production-ready chat engine for Node.js that plugs into your **existing backend** instead of replacing it.
 
 Package: @dax-crafta/chat
+
+## Start Here
+
+Use this package in four steps:
+
+1. Install it.
+2. Initialize it with your app config.
+3. Connect it to your rooms, users, and MongoDB.
+4. Turn on realtime only if your backend needs it.
+
+## 1. Install
+
+```bash
+npm install @dax-crafta/chat
+```
+
+## 2. Import and Create the Instance
+
+```js
+const { chat } = require('@dax-crafta/chat');
+
+const app = chat();
+```
+
+If you want your own defaults, pass config:
+
+```js
+const app = chat({
+  features: {
+    rateLimit: true,
+    auditLogs: true,
+    realtime: true,
+  },
+});
+```
+
+## 3. Create a Room or Channel
+
+```js
+(async () => {
+  const room = await app.createGroupChannel({
+    roomId: 'team-general',
+    name: 'Team General',
+    members: ['u1', 'u2'],
+  });
+
+  console.log(room);
+})().catch(console.error);
+```
+
+Use `createDirectChannel()` for person-to-person chat and `createGroupChannel()` for multi-user chat.
+
+## 4. Send, Read, React, and Mark Seen
+
+```js
+(async () => {
+  const message = await app.sendMessage({
+    roomId: 'team-general',
+    userId: 'u1',
+    text: 'Hello team',
+  });
+
+  await app.addReaction({
+    roomId: 'team-general',
+    messageId: message.id,
+    userId: 'u2',
+    reaction: 'like',
+  });
+
+  await app.markSeen({
+    roomId: 'team-general',
+    messageId: message.id,
+    userId: 'u2',
+  });
+
+  const messages = await app.readMessages({ roomId: 'team-general' });
+  console.log(messages);
+})().catch(console.error);
+```
 
 ## Core Promise
 
@@ -17,49 +96,7 @@ Package: @dax-crafta/chat
 - Socket channel integration via adapter
 - Presence, reply, reactions, seen receipts
 - Group and person-to-person channels
-- MongoDB adapter helper for saving in your own DB
-
-## Install
-
-```bash
-npm install @dax-crafta/chat
-```
-
-## Quick Start
-
-```js
-const { chat } = require('@dax-crafta/chat');
-
-(async () => {
-  const app = chat({
-    features: {
-      realtime: true,
-      rateLimit: true,
-      auditLogs: true,
-    },
-  });
-
-  await app.createGroupChannel({
-    roomId: 'team-general',
-    name: 'Team General',
-    members: ['u1', 'u2'],
-  });
-
-  const message = await app.sendMessage({
-    roomId: 'team-general',
-    userId: 'u1',
-    text: 'Hello team',
-  });
-
-  await app.markSeen({ roomId: 'team-general', messageId: message.id, userId: 'u2' });
-  await app.addReaction({ roomId: 'team-general', messageId: message.id, userId: 'u2', reaction: 'like' });
-
-  console.log(await app.readMessages({ roomId: 'team-general' }));
-})().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
-```
+ - MongoDB adapter helper for saving in your own DB
 
 ## Existing Backend Integration
 
@@ -72,7 +109,9 @@ You pass your own identity and user fields from your app, for example:
 
 This package does not force user management. It uses what you pass from your own app and auth layer.
 
-## Realtime On/Off + Socket Adapter
+## 5. Connect Realtime Only When Needed
+
+If you already use sockets, pass your own adapter.
 
 `features.realtime` and `realtime.enabled` together control transport.
 
@@ -105,7 +144,9 @@ app.joinChannel('team-general', { userId: 'u1', socket });
 app.setUserOnline({ userId: 'u1', roomId: 'team-general', sessionId: 's1' });
 ```
 
-## MongoDB Storage (Your Database)
+Use `setUserOffline()` when the socket closes or the user disconnects.
+
+## 6. Save Data in Your MongoDB
 
 Use your existing Mongo collections.
 
@@ -124,7 +165,9 @@ const app = chat({
 });
 ```
 
-## Config Shape
+If you want to stay on your own backend, this is the cleanest path.
+
+## 7. Configure Defaults and Feature Flags
 
 ```js
 chat({
@@ -162,6 +205,20 @@ chat({
     realtimeAdapter: null,
     customLogger: null,
   },
+});
+```
+
+If you do not pass a value, the package uses the default.
+
+## 8. Listen to Events
+
+```js
+app.on('message', (message) => {
+  console.log('new message', message);
+});
+
+app.on('presence', (status) => {
+  console.log('presence update', status);
 });
 ```
 
@@ -212,6 +269,10 @@ chat({
 - Invalid optional adapter never crashes startup.
 - Missing optional integrations fallback to internal behavior.
 - Warnings are explicit via logger.
+
+## Detailed Guide
+
+For a full breakdown of config, room types, realtime events, Mongo adapter usage, and integration patterns, read [docs/DETAILED-GUIDE.md](docs/DETAILED-GUIDE.md).
 
 ## Run Smoke Tests
 
